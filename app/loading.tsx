@@ -32,7 +32,7 @@ export default function Loading() {
         {/* Animated Logo */}
         <div className="relative">
           <div className="w-20 h-20 bg-gradient-to-r from-primary to-purple-600 rounded-2xl flex items-center justify-center shadow-lg animate-pulse">
-            <div className="text-white text-2xl font-bold">M</div>
+            <div className="text-white text-2xl font-bold">C</div>
           </div>
 
           {/* Pulsing rings around logo */}
@@ -46,7 +46,7 @@ export default function Loading() {
         {/* Brand name */}
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
-            MindfulAI
+            CereneAI
           </h1>
           <p className="text-muted-foreground">
             Loading your therapy experience{dots}

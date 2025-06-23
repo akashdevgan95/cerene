@@ -98,7 +98,7 @@ const testimonials = [
     name: "Sarah M.",
     role: "Marketing Professional",
     content:
-      "MindfulAI has been a game-changer for my anxiety. Having someone to talk to at 3 AM when I can't sleep has been invaluable.",
+      "CereneAI has been a game-changer for my anxiety. Having someone to talk to at 3 AM when I can't sleep has been invaluable.",
     rating: 5,
     avatar: "S",
   },
@@ -114,7 +114,7 @@ const testimonials = [
     name: "Maria R.",
     role: "Working Mother",
     content:
-      "As a busy mom, I don't have time for traditional therapy. MindfulAI fits perfectly into my schedule and really understands my struggles.",
+      "As a busy mom, I don't have time for traditional therapy. CereneAI fits perfectly into my schedule and really understands my struggles.",
     rating: 5,
     avatar: "M",
   },
@@ -201,7 +201,7 @@ export default function LandingPage() {
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                MindfulAI
+                CereneAI
               </span>
             </div>
 
@@ -411,7 +411,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-              Why Choose MindfulAI?
+              Why Choose CereneAI?
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Advanced AI technology meets compassionate care to provide you
@@ -511,7 +511,7 @@ export default function LandingPage() {
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Real stories from people who've transformed their mental health
-              with MindfulAI.
+              with CereneAI.
             </p>
           </div>
 
@@ -629,7 +629,7 @@ export default function LandingPage() {
             </h2>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
               Join thousands of people who've found support, healing, and growth
-              with MindfulAI. Your first session is completely free.
+              with CereneAI. Your first session is completely free.
             </p>
 
             <form

@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-
+import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import { Loading } from "@/components/ui/loaders/loading";
 
+//client component
+import { client } from "@/utils/supabase/client";
 interface SuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -33,8 +35,8 @@ function SuccessModal({ isOpen, onClose, email }: SuccessModalProps) {
   if (!isOpen) return null;
 
   const shareText =
-    "I just joined the MindfulAI waitlist for AI-powered therapy! 🧠✨";
-  const shareUrl = "https://mindfulai.com/waitlist";
+    "I just joined the CereneAI waitlist for AI-powered therapy! 🧠✨";
+  const shareUrl = "https://cerene.ai";
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -42,7 +44,7 @@ function SuccessModal({ isOpen, onClose, email }: SuccessModalProps) {
         <CardContent className="p-6 text-center">
           <div className="mb-4">
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Welcome to MindfulAI!</h3>
+            <h3 className="text-2xl font-bold mb-2">Welcome to CereneAI!</h3>
             <p className="text-muted-foreground mb-4">
               Thank you for joining our waitlist. We've sent a confirmation to{" "}
               <span className="font-semibold text-primary">{email}</span>
@@ -128,6 +130,10 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+  const isRecaptchaEnabled =
+    process.env.NEXT_PUBLIC_ENABLE_WAITLIST_RECAPTCHA === "true";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,10 +144,27 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
       return;
     }
 
+    if (isRecaptchaEnabled && !captchaToken) {
+      setError("Please verify you're not a robot");
+      return;
+    }
+
     setIsLoading(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    if (isRecaptchaEnabled) {
+      const res = await fetch("/api/verify-captcha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: captchaToken }),
+      });
+
+      const result = await res.json();
+      if (!result.success) {
+        setError("CAPTCHA failed. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+    }
 
     setIsLoading(false);
     onSuccess(email);
@@ -149,18 +172,22 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="flex-1">
-          <Input
-            type="email"
-            placeholder="Enter your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="h-12 text-base"
-            disabled={isLoading}
+      <div className="flex flex-col gap-3">
+        <Input
+          type="email"
+          placeholder="Enter your email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="h-12 text-base"
+          disabled={isLoading}
+        />
+        {isRecaptchaEnabled && (
+          <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+            onChange={(token) => setCaptchaToken(token)}
           />
-          {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-        </div>
+        )}
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
         <Button
           type="submit"
           size="lg"
@@ -192,9 +219,19 @@ export default function WaitlistPage() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [submittedEmail, setSubmittedEmail] = useState("");
 
-  const handleWaitlistSuccess = (email: string) => {
-    setSubmittedEmail(email);
-    setShowSuccessModal(true);
+  const handleWaitlistSuccess = async (email: string) => {
+    const { data, error } = await client
+      .from("waitlist")
+      .insert({ email, status: "subscribe" });
+
+    if (error && error.code !== "23505") {
+      console.error("Waitlist error:", error.code);
+    } else {
+      setShowSuccessModal(true);
+      setSubmittedEmail(email);
+    }
+
+    return data;
   };
 
   const features = [
@@ -220,7 +257,7 @@ export default function WaitlistPage() {
       icon: Shield,
       title: "Privacy First",
       description:
-        "HIPAA-compliant platform with end-to-end encryption. Your conversations stay private.",
+        "CereneAI is a platform with end-to-end encryption. Your conversations stay private.",
     },
     {
       icon: BarChart3,
@@ -241,7 +278,7 @@ export default function WaitlistPage() {
       name: "Sarah M.",
       role: "Beta User",
       content:
-        "MindfulAI has been a game-changer for my anxiety. Having 24/7 support has given me so much peace of mind.",
+        "CereneAI has been a game-changer for my anxiety. Having 24/7 support has given me so much peace of mind.",
       rating: 5,
     },
     {
@@ -362,7 +399,7 @@ export default function WaitlistPage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                What Makes MindfulAI Special?
+                What Makes CereneAI Special?
               </h2>
               <p className="text-xl text-muted-foreground">
                 Advanced AI technology meets compassionate care

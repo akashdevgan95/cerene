@@ -1,8 +1,14 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Phone, MessageCircle, Heart, AlertTriangle, Clock } from "lucide-react"
-import Link from "next/link"
-import { Footer } from "@/components/footer"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Phone,
+  MessageCircle,
+  Heart,
+  AlertTriangle,
+  Clock,
+} from "lucide-react";
+import Link from "next/link";
+import { Footer } from "@/components/footer";
 
 export default function CrisisResourcesPage() {
   return (
@@ -16,7 +22,7 @@ export default function CrisisResourcesPage() {
                 <Heart className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                MindfulAI
+                CereneAI
               </span>
             </Link>
             <Link href="/landing">
@@ -32,11 +38,13 @@ export default function CrisisResourcesPage() {
           <CardContent className="p-6">
             <div className="flex items-center space-x-3 mb-4">
               <AlertTriangle className="w-6 h-6 text-red-600 dark:text-red-400" />
-              <h2 className="text-xl font-bold text-red-900 dark:text-red-100">Emergency Situations</h2>
+              <h2 className="text-xl font-bold text-red-900 dark:text-red-100">
+                Emergency Situations
+              </h2>
             </div>
             <p className="text-red-800 dark:text-red-200 mb-4">
-              If you are in immediate danger or having thoughts of suicide, please contact emergency services
-              immediately.
+              If you are in immediate danger or having thoughts of suicide,
+              please contact emergency services immediately.
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
               <Button className="bg-red-600 hover:bg-red-700 text-white">
@@ -59,15 +67,20 @@ export default function CrisisResourcesPage() {
           <div className="w-16 h-16 bg-pink-100 dark:bg-pink-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
             <Heart className="w-8 h-8 text-pink-600 dark:text-pink-400" />
           </div>
-          <h1 className="text-4xl font-bold text-foreground mb-4">Crisis Resources</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-4">
+            Crisis Resources
+          </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            You are not alone. Help is available 24/7 through these trusted resources.
+            You are not alone. Help is available 24/7 through these trusted
+            resources.
           </p>
         </div>
 
         {/* National Crisis Resources */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">National Crisis Hotlines</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            National Crisis Hotlines
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
               <CardHeader>
@@ -78,20 +91,27 @@ export default function CrisisResourcesPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-blue-800 dark:text-blue-200 mb-4">
-                  Free and confidential emotional support for people in suicidal crisis or emotional distress.
+                  Free and confidential emotional support for people in suicidal
+                  crisis or emotional distress.
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <Phone className="w-4 h-4 text-blue-600" />
-                    <span className="font-semibold text-blue-900 dark:text-blue-100">Call: 988</span>
+                    <span className="font-semibold text-blue-900 dark:text-blue-100">
+                      Call: 988
+                    </span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <MessageCircle className="w-4 h-4 text-blue-600" />
-                    <span className="text-blue-800 dark:text-blue-200">Chat: suicidepreventionlifeline.org</span>
+                    <span className="text-blue-800 dark:text-blue-200">
+                      Chat: suicidepreventionlifeline.org
+                    </span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Clock className="w-4 h-4 text-blue-600" />
-                    <span className="text-blue-800 dark:text-blue-200">Available 24/7</span>
+                    <span className="text-blue-800 dark:text-blue-200">
+                      Available 24/7
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -106,16 +126,21 @@ export default function CrisisResourcesPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-green-800 dark:text-green-200 mb-4">
-                  Free, 24/7 support for those in crisis. Text with a trained crisis counselor.
+                  Free, 24/7 support for those in crisis. Text with a trained
+                  crisis counselor.
                 </p>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
                     <MessageCircle className="w-4 h-4 text-green-600" />
-                    <span className="font-semibold text-green-900 dark:text-green-100">Text HOME to 741741</span>
+                    <span className="font-semibold text-green-900 dark:text-green-100">
+                      Text HOME to 741741
+                    </span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Clock className="w-4 h-4 text-green-600" />
-                    <span className="text-green-800 dark:text-green-200">Available 24/7</span>
+                    <span className="text-green-800 dark:text-green-200">
+                      Available 24/7
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -125,11 +150,15 @@ export default function CrisisResourcesPage() {
 
         {/* Specialized Resources */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Specialized Support</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Specialized Support
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-purple-900 dark:text-purple-100">LGBTQ+ Support</CardTitle>
+                <CardTitle className="text-purple-900 dark:text-purple-100">
+                  LGBTQ+ Support
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-3">
@@ -151,10 +180,14 @@ export default function CrisisResourcesPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-orange-900 dark:text-orange-100">Veterans Crisis Line</CardTitle>
+                <CardTitle className="text-orange-900 dark:text-orange-100">
+                  Veterans Crisis Line
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-3">Confidential support for veterans and their families.</p>
+                <p className="text-muted-foreground mb-3">
+                  Confidential support for veterans and their families.
+                </p>
                 <div className="space-y-1 text-sm">
                   <p>
                     <strong>Call:</strong> 1-800-273-8255, Press 1
@@ -171,11 +204,14 @@ export default function CrisisResourcesPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-pink-900 dark:text-pink-100">Domestic Violence</CardTitle>
+                <CardTitle className="text-pink-900 dark:text-pink-100">
+                  Domestic Violence
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-3">
-                  National Domestic Violence Hotline provides support and resources.
+                  National Domestic Violence Hotline provides support and
+                  resources.
                 </p>
                 <div className="space-y-1 text-sm">
                   <p>
@@ -193,10 +229,14 @@ export default function CrisisResourcesPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-indigo-900 dark:text-indigo-100">Substance Abuse</CardTitle>
+                <CardTitle className="text-indigo-900 dark:text-indigo-100">
+                  Substance Abuse
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-3">SAMHSA National Helpline for substance abuse treatment.</p>
+                <p className="text-muted-foreground mb-3">
+                  SAMHSA National Helpline for substance abuse treatment.
+                </p>
                 <div className="space-y-1 text-sm">
                   <p>
                     <strong>Call:</strong> 1-800-662-4357
@@ -213,7 +253,9 @@ export default function CrisisResourcesPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-teal-900 dark:text-teal-100">Eating Disorders</CardTitle>
+                <CardTitle className="text-teal-900 dark:text-teal-100">
+                  Eating Disorders
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-3">
@@ -235,10 +277,14 @@ export default function CrisisResourcesPage() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-red-900 dark:text-red-100">Sexual Assault</CardTitle>
+                <CardTitle className="text-red-900 dark:text-red-100">
+                  Sexual Assault
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground mb-3">RAINN National Sexual Assault Hotline provides support.</p>
+                <p className="text-muted-foreground mb-3">
+                  RAINN National Sexual Assault Hotline provides support.
+                </p>
                 <div className="space-y-1 text-sm">
                   <p>
                     <strong>Call:</strong> 1-800-656-4673
@@ -257,33 +303,57 @@ export default function CrisisResourcesPage() {
 
         {/* International Resources */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">International Resources</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            International Resources
+          </h2>
           <Card>
             <CardContent className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <h4 className="font-semibold text-foreground mb-2">Canada</h4>
-                  <p className="text-sm text-muted-foreground">Talk Suicide Canada: 1-833-456-4566</p>
+                  <p className="text-sm text-muted-foreground">
+                    Talk Suicide Canada: 1-833-456-4566
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">United Kingdom</h4>
-                  <p className="text-sm text-muted-foreground">Samaritans: 116 123</p>
+                  <h4 className="font-semibold text-foreground mb-2">
+                    United Kingdom
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Samaritans: 116 123
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">Australia</h4>
-                  <p className="text-sm text-muted-foreground">Lifeline: 13 11 14</p>
+                  <h4 className="font-semibold text-foreground mb-2">
+                    Australia
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Lifeline: 13 11 14
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">Ireland</h4>
-                  <p className="text-sm text-muted-foreground">Samaritans: 116 123</p>
+                  <h4 className="font-semibold text-foreground mb-2">
+                    Ireland
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Samaritans: 116 123
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">New Zealand</h4>
-                  <p className="text-sm text-muted-foreground">Lifeline: 0800 543 354</p>
+                  <h4 className="font-semibold text-foreground mb-2">
+                    New Zealand
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    Lifeline: 0800 543 354
+                  </p>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">More Countries</h4>
-                  <p className="text-sm text-muted-foreground">findahelpline.com</p>
+                  <h4 className="font-semibold text-foreground mb-2">
+                    More Countries
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    findahelpline.com
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -292,18 +362,25 @@ export default function CrisisResourcesPage() {
 
         {/* Self-Care Tips */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Immediate Self-Care Strategies</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-6">
+            Immediate Self-Care Strategies
+          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-foreground">Grounding Techniques</CardTitle>
+                <CardTitle className="text-foreground">
+                  Grounding Techniques
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2 text-muted-foreground">
                   <li>
-                    • 5-4-3-2-1 technique: Name 5 things you see, 4 you hear, 3 you touch, 2 you smell, 1 you taste
+                    • 5-4-3-2-1 technique: Name 5 things you see, 4 you hear, 3
+                    you touch, 2 you smell, 1 you taste
                   </li>
-                  <li>• Deep breathing: Breathe in for 4, hold for 4, out for 4</li>
+                  <li>
+                    • Deep breathing: Breathe in for 4, hold for 4, out for 4
+                  </li>
                   <li>• Progressive muscle relaxation</li>
                   <li>• Cold water on your face or hands</li>
                 </ul>
@@ -337,7 +414,9 @@ export default function CrisisResourcesPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <h4 className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">In Yourself:</h4>
+                <h4 className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">
+                  In Yourself:
+                </h4>
                 <ul className="space-y-1 text-yellow-800 dark:text-yellow-200 text-sm">
                   <li>• Thoughts of death or suicide</li>
                   <li>• Feeling hopeless or trapped</li>
@@ -347,7 +426,9 @@ export default function CrisisResourcesPage() {
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">In Others:</h4>
+                <h4 className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">
+                  In Others:
+                </h4>
                 <ul className="space-y-1 text-yellow-800 dark:text-yellow-200 text-sm">
                   <li>• Talking about wanting to die</li>
                   <li>• Looking for ways to kill themselves</li>
@@ -363,9 +444,12 @@ export default function CrisisResourcesPage() {
         {/* CTA */}
         <Card className="bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30 border-pink-200 dark:border-pink-800">
           <CardContent className="p-8 text-center">
-            <h3 className="text-xl font-semibold mb-4 text-foreground">Remember: You Are Not Alone</h3>
+            <h3 className="text-xl font-semibold mb-4 text-foreground">
+              Remember: You Are Not Alone
+            </h3>
             <p className="text-muted-foreground mb-6">
-              Crisis situations are temporary. Help is available, and recovery is possible. Reach out for support.
+              Crisis situations are temporary. Help is available, and recovery
+              is possible. Reach out for support.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700">
@@ -381,5 +465,5 @@ export default function CrisisResourcesPage() {
       </div>
       <Footer />
     </div>
-  )
+  );
 }

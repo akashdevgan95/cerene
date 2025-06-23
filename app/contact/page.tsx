@@ -57,7 +57,7 @@ export default function ContactPage() {
                 <MessageCircle className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                MindfulAI
+                CereneAI
               </span>
             </Link>
             <Link href="/landing">
@@ -78,7 +78,7 @@ export default function ContactPage() {
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             We're here to help. Reach out with any questions, concerns, or
-            feedback about MindfulAI.
+            feedback about CereneAI.
           </p>
         </div>
 
@@ -95,7 +95,7 @@ export default function ContactPage() {
                   <div>
                     <p className="font-medium text-foreground">Email</p>
                     <p className="text-muted-foreground">
-                      support@mindfulai.com
+                      support@CereneAI.com
                     </p>
                   </div>
                 </div>
@@ -326,12 +326,12 @@ export default function ContactPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg text-foreground">
-                  Can I use MindfulAI on mobile?
+                  Can I use CereneAI on mobile?
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Yes, MindfulAI works on all devices including smartphones,
+                  Yes, CereneAI works on all devices including smartphones,
                   tablets, and computers. We also have dedicated mobile apps
                   coming soon.
                 </p>

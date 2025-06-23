@@ -153,7 +153,7 @@ export function DeleteAccountModal({
               />
               <Label htmlFor="understand" className="text-sm leading-5">
                 I understand that deleting my account is permanent and cannot be
-                undone. All my data will be permanently removed from MindfulAI's
+                undone. All my data will be permanently removed from CereneAI's
                 servers.
               </Label>
             </div>

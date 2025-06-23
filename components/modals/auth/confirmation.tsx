@@ -72,7 +72,7 @@ export function Confirmation({
       {/* Main Message */}
       <div className="text-center space-y-3">
         <h3 className="text-lg font-semibold">
-          Welcome to MindfulAI, {firstName}!
+          Welcome to CereneAI, {firstName}!
         </h3>
         <p className="text-muted-foreground">
           We've sent a confirmation email to:
@@ -100,7 +100,7 @@ export function Confirmation({
           <li className="flex items-start">
             <span className="font-medium text-blue-600 mr-2">3.</span>
             After clicking the confirmation link, you will be redirected to the
-            MindfulAI homepage
+            CereneAI homepage
           </li>
         </ol>
       </div>

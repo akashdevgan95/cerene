@@ -1,16 +1,31 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle, Crown, Sparkles, CreditCard, Shield, Clock, Users, X, Star } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  CheckCircle,
+  Crown,
+  Sparkles,
+  CreditCard,
+  Shield,
+  Clock,
+  Users,
+  X,
+  Star,
+} from "lucide-react";
 
 interface SubscriptionModalProps {
-  isOpen: boolean
-  onClose: () => void
-  selectedPlan?: "basic" | "premium" | "family"
+  isOpen: boolean;
+  onClose: () => void;
+  selectedPlan?: "basic" | "premium" | "family";
 }
 
 const plans = [
@@ -71,35 +86,45 @@ const plans = [
     color: "green",
     savings: "Best Value",
   },
-]
+];
 
-export function SubscriptionModal({ isOpen, onClose, selectedPlan = "premium" }: SubscriptionModalProps) {
-  const [currentPlan, setCurrentPlan] = useState(selectedPlan)
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly")
-  const [isProcessing, setIsProcessing] = useState(false)
+export function SubscriptionModal({
+  isOpen,
+  onClose,
+  selectedPlan = "premium",
+}: SubscriptionModalProps) {
+  const [currentPlan, setCurrentPlan] = useState(selectedPlan);
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
+    "monthly"
+  );
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleSubscribe = async (planId: string) => {
-    setIsProcessing(true)
+    setIsProcessing(true);
 
     // Simulate payment processing
     setTimeout(() => {
-      setIsProcessing(false)
-      alert(`Successfully subscribed to ${plans.find((p) => p.id === planId)?.name} plan!`)
-      onClose()
-    }, 2000)
-  }
+      setIsProcessing(false);
+      alert(
+        `Successfully subscribed to ${
+          plans.find((p) => p.id === planId)?.name
+        } plan!`
+      );
+      onClose();
+    }, 2000);
+  };
 
   const getYearlyPrice = (monthlyPrice: string) => {
-    const monthly = Number.parseFloat(monthlyPrice.replace("$", ""))
-    const yearly = monthly * 12 * 0.8 // 20% discount
-    return `$${yearly.toFixed(2)}`
-  }
+    const monthly = Number.parseFloat(monthlyPrice.replace("$", ""));
+    const yearly = monthly * 12 * 0.8; // 20% discount
+    return `$${yearly.toFixed(2)}`;
+  };
 
   const getYearlyMonthlyPrice = (monthlyPrice: string) => {
-    const monthly = Number.parseFloat(monthlyPrice.replace("$", ""))
-    const yearlyMonthly = monthly * 0.8 // 20% discount
-    return `$${yearlyMonthly.toFixed(2)}`
-  }
+    const monthly = Number.parseFloat(monthlyPrice.replace("$", ""));
+    const yearlyMonthly = monthly * 0.8; // 20% discount
+    return `$${yearlyMonthly.toFixed(2)}`;
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -111,36 +136,69 @@ export function SubscriptionModal({ isOpen, onClose, selectedPlan = "premium" }:
                 <Crown className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                MindfulAI
+                CereneAI
               </span>
             </div>
-            <Button variant="ghost" size="sm" onClick={onClose} className="w-8 h-8 p-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="w-8 h-8 p-0"
+            >
               <X className="w-4 h-4" />
             </Button>
           </div>
-          <DialogTitle className="text-3xl font-bold">Choose Your Plan</DialogTitle>
-          <p className="text-muted-foreground text-lg">Unlock the full potential of AI therapy with premium features</p>
+          <DialogTitle className="text-3xl font-bold">
+            Choose Your Plan
+          </DialogTitle>
+          <p className="text-muted-foreground text-lg">
+            Unlock the full potential of AI therapy with premium features
+          </p>
 
           {/* Billing Toggle */}
           <div className="flex items-center justify-center space-x-4 mt-6">
-            <span className={`text-sm ${billingCycle === "monthly" ? "font-semibold" : "text-muted-foreground"}`}>
+            <span
+              className={`text-sm ${
+                billingCycle === "monthly"
+                  ? "font-semibold"
+                  : "text-muted-foreground"
+              }`}
+            >
               Monthly
             </span>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setBillingCycle(billingCycle === "monthly" ? "yearly" : "monthly")}
-              className={`relative w-12 h-6 rounded-full p-0 ${billingCycle === "yearly" ? "bg-blue-600" : "bg-gray-200"}`}
+              onClick={() =>
+                setBillingCycle(
+                  billingCycle === "monthly" ? "yearly" : "monthly"
+                )
+              }
+              className={`relative w-12 h-6 rounded-full p-0 ${
+                billingCycle === "yearly" ? "bg-blue-600" : "bg-gray-200"
+              }`}
             >
               <div
-                className={`absolute w-5 h-5 bg-white rounded-full transition-transform ${billingCycle === "yearly" ? "translate-x-6" : "translate-x-0.5"}`}
+                className={`absolute w-5 h-5 bg-white rounded-full transition-transform ${
+                  billingCycle === "yearly"
+                    ? "translate-x-6"
+                    : "translate-x-0.5"
+                }`}
               />
             </Button>
             <div className="flex items-center space-x-2">
-              <span className={`text-sm ${billingCycle === "yearly" ? "font-semibold" : "text-muted-foreground"}`}>
+              <span
+                className={`text-sm ${
+                  billingCycle === "yearly"
+                    ? "font-semibold"
+                    : "text-muted-foreground"
+                }`}
+              >
                 Yearly
               </span>
-              <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">Save 20%</Badge>
+              <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                Save 20%
+              </Badge>
             </div>
           </div>
         </DialogHeader>
@@ -153,8 +211,8 @@ export function SubscriptionModal({ isOpen, onClose, selectedPlan = "premium" }:
                 plan.popular
                   ? "border-purple-500 scale-105 shadow-lg"
                   : currentPlan === plan.id
-                    ? "border-blue-500"
-                    : "border-border hover:border-blue-300"
+                  ? "border-blue-500"
+                  : "border-border hover:border-blue-300"
               }`}
               onClick={() => setCurrentPlan(plan.id)}
             >
@@ -175,15 +233,21 @@ export function SubscriptionModal({ isOpen, onClose, selectedPlan = "premium" }:
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <div className="space-y-2">
                   <div className="text-4xl font-bold">
-                    {billingCycle === "yearly" ? getYearlyMonthlyPrice(plan.price) : plan.price}
+                    {billingCycle === "yearly"
+                      ? getYearlyMonthlyPrice(plan.price)
+                      : plan.price}
                     <span className="text-lg font-normal text-muted-foreground">
                       /{billingCycle === "yearly" ? "month" : plan.period}
                     </span>
                   </div>
                   {billingCycle === "yearly" && (
-                    <div className="text-sm text-muted-foreground">Billed {getYearlyPrice(plan.price)} yearly</div>
+                    <div className="text-sm text-muted-foreground">
+                      Billed {getYearlyPrice(plan.price)} yearly
+                    </div>
                   )}
-                  <p className="text-muted-foreground text-sm">{plan.description}</p>
+                  <p className="text-muted-foreground text-sm">
+                    {plan.description}
+                  </p>
                 </div>
               </CardHeader>
 
@@ -204,10 +268,12 @@ export function SubscriptionModal({ isOpen, onClose, selectedPlan = "premium" }:
                     plan.popular
                       ? "bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
                       : plan.id === "family"
-                        ? "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
-                        : ""
+                      ? "bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+                      : ""
                   }`}
-                  variant={plan.popular || plan.id === "family" ? "default" : "outline"}
+                  variant={
+                    plan.popular || plan.id === "family" ? "default" : "outline"
+                  }
                 >
                   {isProcessing ? (
                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
@@ -243,10 +309,11 @@ export function SubscriptionModal({ isOpen, onClose, selectedPlan = "premium" }:
         <div className="text-center mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
           <p className="text-sm text-yellow-800 dark:text-yellow-200">
             <Sparkles className="w-4 h-4 inline mr-1" />
-            Start with a 7-day free trial • No credit card required • Cancel anytime
+            Start with a 7-day free trial • No credit card required • Cancel
+            anytime
           </p>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
