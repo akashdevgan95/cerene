@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import ReCAPTCHA from "react-google-recaptcha";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -130,10 +129,6 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-
-  const isRecaptchaEnabled =
-    process.env.NEXT_PUBLIC_ENABLE_WAITLIST_RECAPTCHA === "true";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,30 +139,11 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
       return;
     }
 
-    if (isRecaptchaEnabled && !captchaToken) {
-      setError("Please verify you're not a robot");
-      return;
-    }
-
     setIsLoading(true);
 
-    if (isRecaptchaEnabled) {
-      const res = await fetch("/api/verify-captcha", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: captchaToken }),
-      });
-
-      const result = await res.json();
-      if (!result.success) {
-        setError("CAPTCHA failed. Please try again.");
-        setIsLoading(false);
-        return;
-      }
-    }
-
-    setIsLoading(false);
+    // Directly proceed without CAPTCHA
     onSuccess(email);
+    setIsLoading(false);
   };
 
   return (
@@ -181,13 +157,9 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
           className="h-12 text-base"
           disabled={isLoading}
         />
-        {isRecaptchaEnabled && (
-          <ReCAPTCHA
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-            onChange={(token) => setCaptchaToken(token)}
-          />
-        )}
+
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+
         <Button
           type="submit"
           size="lg"
