@@ -55,15 +55,14 @@ function SuccessModal({ isOpen, onClose, email }: SuccessModalProps) {
               <h4 className="font-semibold mb-2">What's Next?</h4>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• Check your email for confirmation</li>
-                <li>• You're #1,247 on the waitlist</li>
-                <li>• Beta access starts in 2-3 weeks</li>
-                <li>• Share with friends to move up!</li>
+                <li>• Beta access starts in 4-6 weeks</li>
+                <li>• Share with your friends so they can join too!</li>
               </ul>
             </div>
 
             <div>
               <p className="text-sm font-medium mb-3">
-                Share with friends to get early access:
+                Share with friends so they can join too!
               </p>
               <div className="flex justify-center space-x-2">
                 <Button
