@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "CereneAI",
     images: [
       {
-        url: "/og-image.png",
+        url: "/logo/og-image.png",
         width: 1200,
         height: 630,
         alt: "CereneAI – AI-powered therapy reimagined",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: "CereneAI – Personalized AI Therapy, 24/7",
     description:
       "Always-on, AI-powered mental health support. CereneAI delivers private, personalized therapy whenever you need it.",
-    images: ["/og-image.png"],
+    images: ["/logo/og-image.png"],
   },
   robots: {
     index: true,
