@@ -7,6 +7,7 @@ import "./globals.css";
 // components
 import { ThemeProvider } from "@/components/theme-provider";
 import { GlobalProvider } from "@/components/providers/global-provider";
+import WaitlistPage from "./waitlist/page";
 
 export const metadata: Metadata = {
   title: "CereneAI – Personalized AI Therapy, 24/7",
@@ -75,7 +76,11 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange={false}
         >
-          <GlobalProvider>{children}</GlobalProvider>
+          {process.env.ENABLE_WAITLIST === "true" ? (
+            <WaitlistPage />
+          ) : (
+            <GlobalProvider>{children}</GlobalProvider>
+          )}
         </ThemeProvider>
       </body>
     </html>
