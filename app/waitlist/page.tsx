@@ -1,10 +1,12 @@
 "use client";
 
 import type React from "react";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+
 import {
   CheckCircle,
   Mail,
@@ -19,11 +21,13 @@ import {
   Twitter,
   Facebook,
   Linkedin,
+  ArrowLeft,
+  KeyRound,
 } from "lucide-react";
 import { Loading } from "@/components/ui/loaders/loading";
+import { WaitlistConfirmationEmail } from "@/emailTemplates/waitlist-confirmation-email";
+import { WaitlistOTPEmail } from "@/emailTemplates/waitlist-otp-email";
 
-//client component
-import { client } from "@/utils/supabase/client";
 interface SuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -34,8 +38,8 @@ function SuccessModal({ isOpen, onClose, email }: SuccessModalProps) {
   if (!isOpen) return null;
 
   const shareText =
-    "I just joined the CereneAI waitlist for AI-powered therapy! 🧠✨";
-  const shareUrl = "https://cerene.ai";
+    "I just joined the Cerene waitlist for AI-powered therapy! 🧠✨";
+  const shareUrl = "https://cerene.com/waitlist";
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -43,10 +47,11 @@ function SuccessModal({ isOpen, onClose, email }: SuccessModalProps) {
         <CardContent className="p-6 text-center">
           <div className="mb-4">
             <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Welcome to CereneAI!</h3>
+            <h3 className="text-2xl font-bold mb-2">Welcome to Cerene!</h3>
             <p className="text-muted-foreground mb-4">
-              Thank you for joining our waitlist. We've sent a confirmation to{" "}
-              <span className="font-semibold text-primary">{email}</span>
+              Thank you for joining our waitlist. Your email{" "}
+              <span className="font-semibold text-primary">{email}</span> has
+              been verified successfully!
             </p>
           </div>
 
@@ -54,15 +59,16 @@ function SuccessModal({ isOpen, onClose, email }: SuccessModalProps) {
             <div className="p-4 bg-primary/10 rounded-lg">
               <h4 className="font-semibold mb-2">What's Next?</h4>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Check your email for confirmation</li>
+                <li>• You're on the waitlist</li>
                 <li>• Beta access starts in 4-6 weeks</li>
-                <li>• Share with your friends so they can join too!</li>
+                <li>• We'll email you when it's ready</li>
+                <li>• Share with friends</li>
               </ul>
             </div>
 
             <div>
               <p className="text-sm font-medium mb-3">
-                Share with friends so they can join too!
+                Share with friends to get early access:
               </p>
               <div className="flex justify-center space-x-2">
                 <Button
@@ -120,11 +126,172 @@ function SuccessModal({ isOpen, onClose, email }: SuccessModalProps) {
   );
 }
 
-interface WaitlistFormProps {
-  onSuccess: (email: string) => void;
+interface OTPVerificationProps {
+  email: string;
+  onSuccess: () => void;
+  onBack: () => void;
 }
 
-function WaitlistForm({ onSuccess }: WaitlistFormProps) {
+function OTPVerification({ email, onSuccess, onBack }: OTPVerificationProps) {
+  const [otp, setOtp] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isResending, setIsResending] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!otp || otp.length !== 6) {
+      setError("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    setIsLoading(true);
+
+    const res = await fetch("/api/verify-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, otp }),
+    });
+
+    const result = await res.json();
+
+    setIsLoading(false);
+
+    if (res.ok && result.success) {
+      onSuccess();
+    } else {
+      setError(result.error || "Invalid OTP. Please try again.");
+    }
+  };
+
+  const handleResendOTP = async () => {
+    setIsResending(true);
+    setError("");
+
+    const res = await fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await res.json();
+    setIsResending(false);
+
+    if (!res.ok || !result.sent) {
+      setError("Failed to resend OTP. Try again later.");
+      return;
+    }
+
+    setResendCooldown(60);
+
+    const interval = setInterval(() => {
+      setResendCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+    setOtp(value);
+  };
+
+  return (
+    <div className="max-w-md mx-auto">
+      <div className="text-center mb-6">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
+          <KeyRound className="h-8 w-8 text-primary" />
+        </div>
+        <h2 className="text-2xl font-bold mb-2">Verify Your Email</h2>
+        <p className="text-muted-foreground">
+          We've sent a 6-digit verification code to{" "}
+          <span className="font-semibold text-primary">{email}</span>
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <Input
+            type="text"
+            placeholder="Enter 6-digit OTP"
+            value={otp}
+            onChange={handleOtpChange}
+            className="h-12 text-center text-2xl font-mono tracking-widest"
+            disabled={isLoading}
+            maxLength={6}
+          />
+          {error && (
+            <p className="text-red-500 text-sm mt-1 text-center">{error}</p>
+          )}
+        </div>
+
+        <Button
+          type="submit"
+          size="lg"
+          className="w-full h-12 bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+          disabled={isLoading || otp.length !== 6}
+        >
+          {isLoading ? (
+            <>
+              <Loading size="sm" className="mr-2" />
+              Verifying...
+            </>
+          ) : (
+            "Verify & Join Waitlist"
+          )}
+        </Button>
+
+        <div className="text-center space-y-2">
+          <p className="text-sm text-muted-foreground">
+            Didn't receive the code?
+          </p>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={handleResendOTP}
+            disabled={isResending || resendCooldown > 0}
+          >
+            {isResending ? (
+              <>
+                <Loading size="sm" className="mr-2" />
+                Sending...
+              </>
+            ) : resendCooldown > 0 ? (
+              `Resend in ${resendCooldown}s`
+            ) : (
+              "Resend OTP"
+            )}
+          </Button>
+        </div>
+
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={onBack}
+          className="w-full"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Email
+        </Button>
+      </form>
+    </div>
+  );
+}
+
+interface WaitlistFormProps {
+  onOTPSent: (email: string) => void;
+}
+
+function WaitlistForm({ onOTPSent }: WaitlistFormProps) {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -140,25 +307,37 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
 
     setIsLoading(true);
 
-    // Directly proceed without CAPTCHA
-    onSuccess(email);
+    const res = await fetch("/api/send-otp", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+
+    const result = await res.json();
+
     setIsLoading(false);
+
+    if (res.ok && result.sent) {
+      onOTPSent(email);
+    } else {
+      setError("Failed to send OTP. Please try again.");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex flex-col gap-3">
-        <Input
-          type="email"
-          placeholder="Enter your email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="h-12 text-base"
-          disabled={isLoading}
-        />
-
-        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-
+      <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex-1">
+          <Input
+            type="email"
+            placeholder="Enter your email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="h-12 text-base"
+            disabled={isLoading}
+          />
+          {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+        </div>
         <Button
           type="submit"
           size="lg"
@@ -167,8 +346,8 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
         >
           {isLoading ? (
             <>
-              <Loading size="sm" className="mr-2" variant="spinner" />
-              Joining...
+              <Loading size="sm" className="mr-2" />
+              Sending OTP...
             </>
           ) : (
             <>
@@ -187,22 +366,23 @@ function WaitlistForm({ onSuccess }: WaitlistFormProps) {
 }
 
 export default function WaitlistPage() {
+  const [step, setStep] = useState<"email" | "otp" | "success">("email");
+  const [email, setEmail] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [submittedEmail, setSubmittedEmail] = useState("");
 
-  const handleWaitlistSuccess = async (email: string) => {
-    const { data, error } = await client
-      .from("waitlist")
-      .insert({ email, status: "subscribe" });
+  const handleOTPSent = (userEmail: string) => {
+    setEmail(userEmail);
+    setStep("otp");
+  };
 
-    if (error && error.code !== "23505") {
-      console.error("Waitlist error:", error.code);
-    } else {
-      setShowSuccessModal(true);
-      setSubmittedEmail(email);
-    }
+  const handleOTPSuccess = () => {
+    setStep("success");
+    setShowSuccessModal(true);
+  };
 
-    return data;
+  const handleBackToEmail = () => {
+    setStep("email");
+    setEmail("");
   };
 
   const features = [
@@ -228,7 +408,7 @@ export default function WaitlistPage() {
       icon: Shield,
       title: "Privacy First",
       description:
-        "CereneAI is a platform with end-to-end encryption. Your conversations stay private.",
+        "HIPAA-compliant platform with end-to-end encryption. Your conversations stay private.",
     },
     {
       icon: BarChart3,
@@ -249,7 +429,7 @@ export default function WaitlistPage() {
       name: "Sarah M.",
       role: "Beta User",
       content:
-        "CereneAI has been a game-changer for my anxiety. Having 24/7 support has given me so much peace of mind.",
+        "Cerene has been a game-changer for my anxiety. Having 24/7 support has given me so much peace of mind.",
       rating: 5,
     },
     {
@@ -299,8 +479,8 @@ export default function WaitlistPage() {
       {/* Floating Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
+        <div className="absolute top-3/4 right-1/4 w-96 h-96 bg-green-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute top-1/2 left-3/4 w-48 h-48 bg-green-500/10 rounded-full blur-3xl animate-pulse delay-2000" />
       </div>
 
       <div className="relative z-10">
@@ -323,12 +503,30 @@ export default function WaitlistPage() {
             </div>
 
             <div className="max-w-md mx-auto mb-8">
-              <WaitlistForm onSuccess={handleWaitlistSuccess} />
+              {step === "email" && <WaitlistForm onOTPSent={handleOTPSent} />}
+              {step === "otp" && (
+                <OTPVerification
+                  email={email}
+                  onSuccess={handleOTPSuccess}
+                  onBack={handleBackToEmail}
+                />
+              )}
+              {step === "success" && (
+                <div className="text-center">
+                  <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">You're all set!</h3>
+                  <p className="text-muted-foreground">
+                    Welcome to the Cerene waitlist. We'll be in touch soon!
+                  </p>
+                </div>
+              )}
             </div>
 
-            <p className="text-sm text-muted-foreground">
-              No spam, ever. Unsubscribe at any time.
-            </p>
+            {step === "email" && (
+              <p className="text-sm text-muted-foreground">
+                No spam, ever. Unsubscribe at any time.
+              </p>
+            )}
           </div>
         </section>
 
@@ -370,7 +568,7 @@ export default function WaitlistPage() {
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                What Makes CereneAI Special?
+                What Makes Cerene Special?
               </h2>
               <p className="text-xl text-muted-foreground">
                 Advanced AI technology meets compassionate care
@@ -447,23 +645,41 @@ export default function WaitlistPage() {
             </p>
 
             <div className="max-w-md mx-auto mb-8">
-              <WaitlistForm onSuccess={handleWaitlistSuccess} />
+              {step === "email" && <WaitlistForm onOTPSent={handleOTPSent} />}
+              {step === "otp" && (
+                <OTPVerification
+                  email={email}
+                  onSuccess={handleOTPSuccess}
+                  onBack={handleBackToEmail}
+                />
+              )}
+              {step === "success" && (
+                <div className="text-center">
+                  <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold mb-2">You're all set!</h3>
+                  <p className="text-muted-foreground">
+                    Welcome to the Cerene waitlist. We'll be in touch soon!
+                  </p>
+                </div>
+              )}
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                Free to join
+            {step === "email" && (
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-muted-foreground">
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-purple-500 mr-2" />
+                  Free to join
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-purple-500 mr-2" />
+                  No commitment required
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-4 w-4 text-purple-500 mr-2" />
+                  Cancel anytime
+                </div>
               </div>
-              <div className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                No commitment required
-              </div>
-              <div className="flex items-center">
-                <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                Cancel anytime
-              </div>
-            </div>
+            )}
           </div>
         </section>
       </div>
@@ -471,7 +687,7 @@ export default function WaitlistPage() {
       <SuccessModal
         isOpen={showSuccessModal}
         onClose={() => setShowSuccessModal(false)}
-        email={submittedEmail}
+        email={email}
       />
     </div>
   );
