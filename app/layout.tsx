@@ -2,6 +2,7 @@ import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { GoogleTagManager } from "@next/third-parties/google";
 import "./globals.css";
 
 // components
@@ -67,6 +68,9 @@ export default function RootLayout({
           data-domain="cerene.ai"
           src="https://plausible.io/js/script.js"
           strategy="afterInteractive"
+        />
+        <GoogleTagManager
+          gtmId={process.env.NEXT_PUBLIC_GOOGLE_TAG_MANAGER_ID || ""}
         />
       </head>
       <body className={inter.className}>
